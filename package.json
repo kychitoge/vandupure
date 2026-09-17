@@ -26,6 +26,7 @@
     "type": "git",
     "url": "https://github.com/kychitoge/vandupure.git"
   },
+  "packageManager": "pnpm@9.15.4",
   "homepage": "https://github.com/kychitoge/vandupure#readme",
   "license": "GPL-3.0"
 }
