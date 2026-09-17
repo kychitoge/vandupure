@@ -1,0 +1,64 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Release Extension Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Run test suite
+        run: pnpm test
+
+      - name: Build and package extension zip
+        run: pnpm zip
+
+      - name: Compute SHA-256 checksum
+        id: checksum
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          ZIP_FILE=$(ls .output/*.zip | head -n 1)
+          DEST_NAME="vandu-pure-v${VERSION}.zip"
+          mv "$ZIP_FILE" "$DEST_NAME"
+          sha256sum "$DEST_NAME" > "${DEST_NAME}.sha256"
+          echo "zip_file=$DEST_NAME" >> $GITHUB_OUTPUT
+          echo "checksum_file=${DEST_NAME}.sha256" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          files: |
+            ${{ steps.checksum.outputs.zip_file }}
+            ${{ steps.checksum.outputs.checksum_file }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false

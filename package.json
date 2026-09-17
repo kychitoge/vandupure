@@ -1,0 +1,31 @@
+{
+  "name": "vandupure",
+  "version": "1.0.2",
+  "private": true,
+  "description": "Vân Du Pure - Trình làm sạch web và loại bỏ quảng cáo tinh gọn",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "preact": "^10.26.4"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.2",
+    "@types/chrome": "^0.0.312",
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.7",
+    "wxt": "^0.19.26"
+  },
+  "author": "kychitoge",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kychitoge/vandupure.git"
+  },
+  "homepage": "https://github.com/kychitoge/vandupure#readme",
+  "license": "GPL-3.0"
+}
